@@ -3,6 +3,16 @@
     <h2>{{ isLogin ? 'Login' : 'Register' }}</h2>
     
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div class="form-group" *ngIf="!isLogin">
+        <input 
+          type="text" 
+          [(ngModel)]="displayName" 
+          name="displayName"
+          placeholder="Full Name"
+          required
+          [disabled]="loading">
+      </div>
+      
       <div class="form-group">
         <input 
           type="email" 
@@ -18,7 +28,7 @@
           type="password" 
           [(ngModel)]="password" 
           name="password"
-          placeholder="Password"
+          placeholder="Password (min 8 characters)"
           required
           [disabled]="loading">
       </div>
@@ -32,6 +42,19 @@
         {{ loading ? 'Loading...' : (isLogin ? 'Login' : 'Register') }}
       </button>
     </form>
+    
+    <div class="divider">
+      <span>or</span>
+    </div>
+    
+    <button 
+      type="button" 
+      (click)="onGoogleSignIn()"
+      [disabled]="loading"
+      class="google-btn">
+      <span class="google-icon">G</span>
+      Continue with Google
+    </button>
     
     <p class="toggle-text">
       {{ isLogin ? "Don't have an account?" : "Already have an account?" }}

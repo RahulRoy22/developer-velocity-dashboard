@@ -17,18 +17,24 @@ export class LoginComponent {
 
   email = '';
   password = '';
+  displayName = '';
   isLogin = true;
   loading = false;
   error = '';
 
   async onSubmit() {
-    if (!this.email || !this.password) {
+    if (!this.email || !this.password || (!this.isLogin && !this.displayName)) {
       this.error = 'Please fill in all fields.';
       return;
     }
     
     if (!this.isValidEmail(this.email)) {
       this.error = 'Please enter a valid email address.';
+      return;
+    }
+
+    if (this.password.length < 8) {
+      this.error = 'Password must be at least 8 characters long.';
       return;
     }
     
@@ -39,8 +45,22 @@ export class LoginComponent {
       if (this.isLogin) {
         await this.authService.login(this.email, this.password);
       } else {
-        await this.authService.register(this.email, this.password);
+        await this.authService.register(this.email, this.password, this.displayName);
       }
+      this.router.navigate(['/dashboard']);
+    } catch (error: any) {
+      this.error = error.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async onGoogleSignIn() {
+    this.loading = true;
+    this.error = '';
+
+    try {
+      await this.authService.loginWithGoogle();
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
       this.error = error.message;
@@ -56,5 +76,6 @@ export class LoginComponent {
   toggleMode() {
     this.isLogin = !this.isLogin;
     this.error = '';
+    this.displayName = '';
   }
 }
