@@ -38,7 +38,7 @@
 
     <!-- Hero -->
     <div class="hero">
-      <span class="week-pill">WEEK 24 · Q3 2025</span>
+      <span class="week-pill">{{ currentWeekQuarter() }}</span>
       <h1>Developer Velocity<br><span class="muted">Dashboard</span></h1>
     </div>
 
@@ -81,7 +81,7 @@
           <div class="panel-eyebrow">Completion Trend</div>
           <div class="spark-header">
             <span class="spark-value">{{ rate() }}%</span>
-            <span class="spark-badge">↑ 12%</span>
+            <span class="spark-badge">{{ completionTrend() }}</span>
           </div>
           <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
             <defs>
@@ -128,10 +128,20 @@
               } @else {
                 <div class="check-done">✓</div>
               }
-              <span class="task-title" 
-                [class.task-title-done]="task.status === 'completed'">
-                {{ task.title }}
-              </span>
+              
+              @if (editingTaskId === task.id) {
+                <input class="task-edit-input" [(ngModel)]="editingTitle" (keydown.enter)="saveEdit()" (keydown.escape)="cancelEdit()">
+                <button class="save-btn" (click)="saveEdit()">Save</button>
+                <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+              } @else {
+                <span class="task-title" [class.task-title-done]="task.status === 'completed'">
+                  {{ task.title }}
+                </span>
+                @if (task.status !== 'completed') {
+                  <button class="edit-btn" (click)="startEdit(task)">Edit</button>
+                }
+                <button class="delete-btn" (click)="deleteTask(task.id!)">Delete</button>
+              }
             </div>
           }
         </div>

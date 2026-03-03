@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, updateDoc, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, query, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Task } from '../models/task.model';
 
@@ -31,5 +31,15 @@ export class TaskService {
       status: 'completed',
       completedAt: Date.now()
     });
+  }
+
+  updateTask(taskId: string, title: string) {
+    const taskDocRef = doc(this.firestore, `tasks/${taskId}`);
+    return updateDoc(taskDocRef, { title });
+  }
+
+  deleteTask(taskId: string) {
+    const taskDocRef = doc(this.firestore, `tasks/${taskId}`);
+    return deleteDoc(taskDocRef);
   }
 }

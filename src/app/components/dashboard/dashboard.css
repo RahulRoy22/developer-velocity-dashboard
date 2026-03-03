@@ -491,14 +491,15 @@ h1 {
 }
 
 .save-btn, .cancel-btn {
-  width: 24px; height: 24px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 4px 12px;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
   flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, transform 0.15s;
 }
 
 .save-btn {
@@ -506,9 +507,44 @@ h1 {
   color: #0d1a0d;
 }
 
+.save-btn:hover {
+  background: #22c55e;
+  transform: translateY(-1px);
+}
+
 .cancel-btn {
-  background: #3f3f46;
+  background: var(--border2);
   color: var(--text2);
+}
+
+.cancel-btn:hover {
+  background: var(--muted);
+  transform: translateY(-1px);
+}
+
+.edit-btn, .delete-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--muted2);
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.edit-btn:hover {
+  background: var(--purple-dark);
+  border-color: var(--purple);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #7f1d1d;
+  border-color: #dc2626;
+  color: #fca5a5;
 }
 
 .task-title, .tag-chip {
