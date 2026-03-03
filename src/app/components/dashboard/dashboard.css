@@ -631,6 +631,33 @@ h1 {
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
+.login-card .login-redirect-btn {
+  width: 100%;
+  background: var(--purple-dark);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: white;
+  font-size: 14px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  margin-bottom: 16px;
+}
+
+.login-card .login-redirect-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+.login-card .note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+}
+
 .login-card .google-icon {
   width: 18px;
   height: 18px;

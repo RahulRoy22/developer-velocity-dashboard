@@ -104,10 +104,18 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
 
   async loginWithGoogle(): Promise<void> {
     try {
-      await this.authService.loginWithGoogle();
+      // Temporarily disabled due to API key restrictions
+      throw new Error('Google sign-in is temporarily disabled. Please use email/password registration.');
+      // await this.authService.loginWithGoogle();
     } catch (error: any) {
       console.error('Google login failed:', error);
+      // Redirect to login page for email/password auth
+      this.router.navigate(['/login']);
     }
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/login']);
   }
 
   async addTask(): Promise<void> {
