@@ -42,9 +42,7 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
   readonly tagOptions: TaskTag[] = ['devops', 'backend', 'testing', 'frontend'];
   readonly tagColors = TAG_COLORS;
 
-  readonly weekData   = [3, 5, 2, 8, 6, 4, 7];
   readonly weekDays   = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-  readonly maxWeekVal = Math.max(...[3, 5, 2, 8, 6, 4, 7]);
 
   // --- computed stats ---
   total     = computed(() => this.tasks().length);
@@ -53,6 +51,23 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
   rate      = computed(() =>
     Math.round((this.completed() / Math.max(this.total(), 1)) * 100)
   );
+
+  // Dynamic weekly data based on user's completed tasks
+  weekData = computed(() => {
+    const completedTasks = this.tasks().filter(t => t.status === 'completed' && t.completedAt);
+    const weeklyData = [0, 0, 0, 0, 0, 0, 0]; // M, T, W, T, F, S, S
+    
+    completedTasks.forEach(task => {
+      const completedDate = new Date(task.completedAt!);
+      const dayOfWeek = completedDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
+      const mappedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Map to our array (0 = Monday)
+      weeklyData[mappedDay]++;
+    });
+    
+    return weeklyData;
+  });
+
+  maxWeekVal = computed(() => Math.max(...this.weekData(), 1));
 
   stats = computed(() => [
     { label: 'Total',    value: String(this.total()),     icon: '◈', color: '#a78bfa' },
@@ -130,7 +145,7 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
   }
 
   barHeight(v: number): string {
-    return `${(v / this.maxWeekVal) * 100}%`;
+    return `${(v / this.maxWeekVal()) * 100}%`;
   }
 
   trackById(_: number, task: Task) { return task.id; }
