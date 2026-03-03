@@ -100,6 +100,10 @@ export class AuthService {
         return new Error('Password must be at least 6 characters.');
       case 'auth/popup-closed-by-user':
         return new Error('Google sign-in was cancelled.');
+      case 'auth/operation-not-allowed':
+        return new Error('Google sign-in is not enabled. Please use email/password.');
+      case 'auth/unauthorized-domain':
+        return new Error('This domain is not authorized for Google sign-in.');
       default:
         return new Error('Authentication failed. Please try again.');
     }
