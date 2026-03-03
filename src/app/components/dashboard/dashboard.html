@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <h2>Developer Velocity</h2>
+  
+  <div class="chart-wrapper">
+    <canvas id="velocityChart"></canvas>
+  </div>
+
+  <hr>
+
+  <div class="task-input">
+    <input #newTaskInput type="text" placeholder="What needs to be done?">
+    <button (click)="addTask(newTaskInput.value); newTaskInput.value=''">Add Task</button>
+  </div>
+
+  <ul class="task-list">
+    @for (task of tasks; track task.id) {
+      <li>
+        {{ task.title }} - <strong>{{ task.status }}</strong>
+        @if (task.status !== 'completed') {
+          <button (click)="completeTask(task.id!)">Complete</button>
+        }
+      </li>
+    }
+  </ul>
+</div>
