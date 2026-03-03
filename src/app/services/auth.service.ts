@@ -89,15 +89,21 @@ export class AuthService {
   private handleAuthError(error: AuthError): Error {
     switch (error.code) {
       case 'auth/email-already-in-use':
-        return new Error('Email already exists. Try logging in instead.');
+        return new Error('This email is already registered. Please sign in instead.');
       case 'auth/user-not-found':
-        return new Error('No account found. Try signing up instead.');
+        return new Error('No account found with this email. Please register first.');
       case 'auth/wrong-password':
-        return new Error('Incorrect password.');
+        return new Error('Incorrect password. Please try again.');
       case 'auth/invalid-email':
-        return new Error('Invalid email address.');
+        return new Error('Please enter a valid email address.');
+      case 'auth/invalid-credential':
+        return new Error('Invalid email or password. Please check your credentials.');
+      case 'auth/user-disabled':
+        return new Error('This account has been disabled.');
+      case 'auth/too-many-requests':
+        return new Error('Too many failed attempts. Please try again later.');
       case 'auth/weak-password':
-        return new Error('Password must be at least 6 characters.');
+        return new Error('Password must be at least 6 characters long.');
       case 'auth/popup-closed-by-user':
         return new Error('Google sign-in was cancelled.');
       case 'auth/operation-not-allowed':
@@ -105,7 +111,7 @@ export class AuthService {
       case 'auth/unauthorized-domain':
         return new Error('This domain is not authorized for Google sign-in.');
       default:
-        return new Error('Authentication failed. Please try again.');
+        return new Error(`Authentication failed: ${error.message || 'Please try again.'}`);
     }
   }
 }

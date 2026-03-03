@@ -43,13 +43,19 @@ export class LoginComponent {
 
     try {
       if (this.isLogin) {
-        await this.authService.login(this.email, this.password);
+        await this.authService.login(this.email.trim(), this.password);
       } else {
-        await this.authService.register(this.email, this.password, this.displayName);
+        await this.authService.register(this.email.trim(), this.password, this.displayName.trim());
       }
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      this.error = error.message;
+      // Show specific error message from Firebase Auth
+      this.error = error.message || 'Authentication failed. Please try again.';
+      
+      // Clear password field on error for security
+      if (this.isLogin) {
+        this.password = '';
+      }
     } finally {
       this.loading = false;
     }
