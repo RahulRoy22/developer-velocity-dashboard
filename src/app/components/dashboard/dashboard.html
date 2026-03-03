@@ -1,25 +1,133 @@
-<div class="dashboard-container">
-  <h2>Developer Velocity</h2>
-  
-  <div class="chart-wrapper">
-    <canvas id="velocityChart"></canvas>
+<div class="dashboard">
+
+  <!-- Top Nav -->
+  <nav class="topbar">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <span class="brand-name">DevVelocity</span>
+    </div>
+    <div class="nav-actions">
+      <div class="sprint-badge">
+        <span class="dot"></span> Sprint active
+      </div>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <!-- Hero -->
+    <div class="hero">
+      <span class="week-pill">WEEK 24 · Q3 2025</span>
+      <h1>Developer Velocity<br><span class="muted">Dashboard</span></h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      @for (stat of stats(); track stat.label) {
+        <div class="stat-card">
+          <div class="stat-icon" [style.color]="stat.color">{{ stat.icon }}</div>
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- Main -->
+    <div class="main-grid">
+
+      <!-- Left: Charts -->
+      <div class="charts-col">
+
+        <!-- Bar chart -->
+        <div class="panel">
+          <div class="panel-eyebrow">Weekly Output</div>
+          <div class="panel-title">35 Tasks Closed</div>
+          <div class="bar-chart">
+            @for (bar of weekData; track $index; let i = $index) {
+              <div class="bar-col">
+                <div class="bar-wrap">
+                  <span class="bar-label">{{ bar }}</span>
+                  <div class="bar" [class.bar-active]="i === 4" [style.height]="barHeight(bar)"></div>
+                </div>
+                <span class="bar-day">{{ weekDays[i] }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Sparkline -->
+        <div class="panel">
+          <div class="panel-eyebrow">Completion Trend</div>
+          <div class="spark-header">
+            <span class="spark-value">{{ rate() }}%</span>
+            <span class="spark-badge">↑ 12%</span>
+          </div>
+          <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#a78bfa" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <polyline [attr.points]="sparklinePoints()" fill="none" stroke="#a78bfa" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round" />
+            @for (dot of sparklineDots(); track $index) {
+              <circle [attr.cx]="dot.cx" [attr.cy]="dot.cy" r="3" fill="#a78bfa" />
+            }
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Right: Tasks -->
+      <div class="panel tasks-panel">
+        <div class="panel-eyebrow">Task Queue</div>
+        <div class="panel-title">Sprint Backlog</div>
+
+        <!-- Input -->
+        <div class="task-input-row">
+          <input
+            class="task-input"
+            [(ngModel)]="newTaskTitle"
+            (keydown.enter)="addTask()"
+            placeholder="New task..."
+          />
+          <button class="add-btn" (click)="addTask()">Add</button>
+        </div>
+
+        <!-- List -->
+        <div class="task-list">
+          @if (tasks().length === 0) {
+            <div class="empty-state">No tasks. Add one above ↑</div>
+          }
+          @for (task of tasks(); track task.id; let i = $index) {
+            <div class="task-row" [class.task-done]="task.status === 'completed'">
+              @if (task.status !== 'completed') {
+                <button class="check-btn" (click)="completeTask(task.id!)">✓</button>
+              } @else {
+                <div class="check-done">✓</div>
+              }
+              <span class="task-title" 
+                [class.task-title-done]="task.status === 'completed'">
+                {{ task.title }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">Sprint Progress</span>
+            <span class="progress-pct">{{ rate() }}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="rate()"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
-
-  <hr>
-
-  <div class="task-input">
-    <input #newTaskInput type="text" placeholder="What needs to be done?">
-    <button (click)="addTask(newTaskInput.value); newTaskInput.value=''">Add Task</button>
-  </div>
-
-  <ul class="task-list">
-    @for (task of tasks; track task.id) {
-      <li>
-        {{ task.title }} - <strong>{{ task.status }}</strong>
-        @if (task.status !== 'completed') {
-          <button (click)="completeTask(task.id!)">Complete</button>
-        }
-      </li>
-    }
-  </ul>
 </div>

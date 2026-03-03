@@ -1,7 +1,8 @@
 export interface Task {
-  id?: string;
+  id?: string; 
+  userId: string; // <-- Add this new required property
   title: string;
-  status: 'pending' | 'completed';
-  createdAt: number;
-  completedAt?: number;
+  status: 'pending' | 'in-progress' | 'completed';
+  createdAt: number; 
+  completedAt?: number; 
 }

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, updateDoc, query, where } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Task } from '../models/task.model';
 
@@ -7,28 +7,17 @@ import { Task } from '../models/task.model';
   providedIn: 'root'
 })
 export class TaskService {
-  // Inject Firestore directly (Angular 14+ style)
-  private firestore: Firestore = inject(Firestore);
-  
-  // Reference to the 'tasks' collection in your database
+  private firestore = inject(Firestore);
   private tasksCollection = collection(this.firestore, 'tasks');
 
-  constructor() {}
-
-  /**
-   * 1. GET ALL TASKS (Real-time stream)
-   * The { idField: 'id' } grabs the hidden Firestore document ID 
-   * and attaches it to your Task object.
-   */
-  getTasks(): Observable<Task[]> {
-    return collectionData(this.tasksCollection, { idField: 'id' }) as Observable<Task[]>;
+  getTasks(userId: string): Observable<Task[]> {
+    const userTasksQuery = query(this.tasksCollection, where('userId', '==', userId));
+    return collectionData(userTasksQuery, { idField: 'id' }) as Observable<Task[]>;
   }
 
-  /**
-   * 2. ADD A NEW TASK
-   */
-  addTask(taskTitle: string) {
+  addTask(taskTitle: string, userId: string) {
     const newTask: Task = {
+      userId: userId,
       title: taskTitle,
       status: 'pending',
       createdAt: Date.now()
@@ -36,10 +25,6 @@ export class TaskService {
     return addDoc(this.tasksCollection, newTask);
   }
 
-  /**
-   * 3. MARK TASK AS COMPLETED
-   * We need the ID to know which document to update.
-   */
   markAsCompleted(taskId: string) {
     const taskDocRef = doc(this.firestore, `tasks/${taskId}`);
     return updateDoc(taskDocRef, {
