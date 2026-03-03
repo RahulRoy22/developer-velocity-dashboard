@@ -2,13 +2,17 @@
   <div class="login-container">
     <div class="login-card">
       <h2>Welcome to DevVelocity</h2>
-      <p>Please register or sign in to continue</p>
-      <button class="login-redirect-btn" (click)="goToLogin()">
-        Go to Login/Register
+      <p>Sign in to view your dashboard</p>
+      <button class="google-btn" (click)="loginWithGoogle()">
+        <span class="google-icon">G</span>
+        Continue with Google
       </button>
-      <div class="note">
-        <small>Google sign-in is temporarily unavailable. Please use email/password.</small>
+      <div class="divider">
+        <span>or</span>
       </div>
+      <button class="login-redirect-btn" (click)="goToLogin()">
+        Email/Password Login
+      </button>
     </div>
   </div>
 }

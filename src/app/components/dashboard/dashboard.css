@@ -624,11 +624,49 @@ h1 {
   justify-content: center;
   gap: 12px;
   transition: background 0.15s, box-shadow 0.15s;
+  margin-bottom: 16px;
 }
 
 .login-card .google-btn:hover {
   background: #f8f9fa;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.login-card .divider {
+  position: relative;
+  text-align: center;
+  margin: 16px 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+}
+
+.login-card .divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.login-card .divider span {
+  background: var(--surface);
+  padding: 0 16px;
+}
+
+.login-card .google-icon {
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(45deg, #4285f4, #34a853, #fbbc05, #ea4335);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .login-card .login-redirect-btn {

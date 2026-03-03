@@ -62,20 +62,17 @@ export class LoginComponent {
   }
 
   async onGoogleSignIn() {
-    this.error = 'Google sign-in is temporarily disabled due to API restrictions. Please use email/password.';
-    return;
-    
-    // Disabled temporarily
-    // this.loading = true;
-    // this.error = '';
-    // try {
-    //   await this.authService.loginWithGoogle();
-    //   this.router.navigate(['/dashboard']);
-    // } catch (error: any) {
-    //   this.error = error.message;
-    // } finally {
-    //   this.loading = false;
-    // }
+    this.loading = true;
+    this.error = '';
+
+    try {
+      await this.authService.loginWithGoogle();
+      this.router.navigate(['/dashboard']);
+    } catch (error: any) {
+      this.error = error.message;
+    } finally {
+      this.loading = false;
+    }
   }
 
   private isValidEmail(email: string): boolean {
