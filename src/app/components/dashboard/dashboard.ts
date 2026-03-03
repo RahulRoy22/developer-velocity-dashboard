@@ -32,6 +32,7 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
   currentUser$ = this.authService.currentUser$;
   private tasksSubscription?: Subscription;
   private currentUserId?: string;
+  currentUser: any = null;
 
   newTaskTitle = '';
   selectedTag: TaskTag = 'backend';
@@ -85,6 +86,7 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.tasksSubscription = this.currentUser$.pipe(
       switchMap(user => {
+        this.currentUser = user;
         if (user) {
           this.currentUserId = user.uid;
           return this.taskService.getTasks(user.uid);
@@ -98,6 +100,14 @@ export class VelocityDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.tasksSubscription?.unsubscribe();
+  }
+
+  async loginWithGoogle(): Promise<void> {
+    try {
+      await this.authService.loginWithGoogle();
+    } catch (error: any) {
+      console.error('Google login failed:', error);
+    }
   }
 
   async addTask(): Promise<void> {
