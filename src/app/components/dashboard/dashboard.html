@@ -62,7 +62,7 @@
         <!-- Bar chart -->
         <div class="panel">
           <div class="panel-eyebrow">Weekly Output</div>
-          <div class="panel-title">35 Tasks Closed</div>
+          <div class="panel-title">{{ completed() }} Tasks Closed</div>
           <div class="bar-chart">
             @for (bar of weekData(); track $index; let i = $index) {
               <div class="bar-col">
