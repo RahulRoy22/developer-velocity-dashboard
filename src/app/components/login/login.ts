@@ -22,7 +22,15 @@ export class LoginComponent {
   error = '';
 
   async onSubmit() {
-    if (!this.email || !this.password) return;
+    if (!this.email || !this.password) {
+      this.error = 'Please fill in all fields.';
+      return;
+    }
+    
+    if (!this.isValidEmail(this.email)) {
+      this.error = 'Please enter a valid email address.';
+      return;
+    }
     
     this.loading = true;
     this.error = '';
@@ -39,6 +47,10 @@ export class LoginComponent {
     } finally {
       this.loading = false;
     }
+  }
+
+  private isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   toggleMode() {
